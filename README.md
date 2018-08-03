@@ -1,5 +1,5 @@
 # NodeChat
 Node.js聊天室Demo
 
-# npm install
-# npm start
+npm install
+npm start
