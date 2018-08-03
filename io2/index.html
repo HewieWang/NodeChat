@@ -1,0 +1,147 @@
+<!doctype html>
+<html>
+  <head>
+    <title>Socket.IO chat</title>
+    <style>
+      * { margin: 0; padding: 0; box-sizing: border-box; }
+      body { font: 13px Helvetica, Arial; }
+      form { background: #000; padding: 3px; position: fixed; bottom: 0; width: 100%;}
+      form input { border: 0; padding: 10px; width: 85%; margin-right: .5%;display:inline-block;}
+      form button { width: 9%; background: rgb(130, 224, 255); border: none; padding: 10px;float:right;}
+      #messages { list-style-type: none; margin: 0; padding: 0;margin-bottom: 30px }
+      #messages li { padding: 5px 10px; }
+      #messages li:nth-child(odd) { background: #eee; }
+      #messages { margin-bottom: 40px }
+	  .bubble {
+  padding: 6px;
+  overflow: hidden;
+  position: relative;
+}
+
+.bubble:after {
+  clear: both;
+  content: '';
+}
+
+.bubble a.avatar {
+  display: block;
+  height: 44px;
+  width: 44px;
+  border-radius: 2px;
+  overflow: hidden;
+}
+
+.bubble a.avatar > img {
+  width: 100%;
+  height: 100%;
+}
+
+.bubble.left a.avatar {
+  float: left;
+}
+
+.bubble.right a.avatar {
+  float: right;
+}
+
+.bubble .content {
+  width: auto;
+  padding: 0.5em;
+  font-size: 15px;
+  line-height: 1.5;
+  border-radius: 6px;
+  border: 1px solid;
+  position: relative;
+  display: inline-block;
+}
+
+.bubble .content:before {
+  content: '';
+  display: inline-block;
+  box-sizing: border-box;
+  width: 12px;
+  height: 12px;
+  border: 1px solid transparent;
+  border-radius: 3px;
+  position: absolute;
+  background-color: inherit;
+  border-right-color: inherit;
+  border-bottom-color: inherit;
+}
+
+.bubble.left {
+  text-align: left;
+}
+
+.bubble.right {
+  text-align: right;
+}
+
+.bubble.left .wrap {
+  margin-left: 56px;
+  margin-right: 56px;
+}
+
+.bubble.left .content {
+  background: #1abc9c;
+  border-color: #1abc9c;
+  color: #fff;
+}
+
+.bubble.left .content:before {
+  left: -6px;
+  top: 16px;
+  transform: rotate(135deg);
+}
+
+.bubble.right .wrap {
+  margin-right: 56px;
+  margin-left: 56px;
+}
+
+.bubble.right .content {
+  background: #2ecc71;
+  border-color: #2ecc71;
+  color: #fff;
+  text-align: left;
+}
+
+.bubble.right .content:before {
+  right: -6px;
+  top: 16px;
+  transform: rotate(-45deg);
+}
+    </style>
+  </head>
+  <body>
+    <ul id="messages"></ul>
+    <br>
+    <form action="">
+	  <!-- <textarea id="m" cols="20" rows="2" ></textarea> -->
+      <input id="m" autocomplete="off" />
+      <input type="file" name="file" accept="image/gif,image/jpeg,image/png" style="width:80px">
+	     <button>发送</button>
+    </form>
+    <script src="https://cdn.socket.io/socket.io-1.2.0.js"></script>
+    <script src="https://code.jquery.com/jquery-1.11.1.js"></script>
+    <script>
+      $(function () {
+        var socket = io();
+        $('form').submit(function(){
+			if($('#m').val()==''){
+				alert("请输入信息");
+			}else{
+				socket.emit('chat message', $('#m').val());
+				  $('#m').val('');
+				  return false;
+			}
+          
+        });
+        socket.on('chat message', function(msg){
+          $('#messages').append('<div class="bubble left"><a class="avatar" href><img src="http://img5.duitang.com/uploads/item/201508/09/20150809005334_rxVJH.jpeg" alt/></a><div class="wrap"><div style="margin:-5px 10px 5px auto;font-weight:800;display: inline-block;">韩东东</div><span style="font-size:10px;color:#adadad">'+new Date().getHours()+':'+new Date().getMinutes()+':'+new Date().getSeconds()+'</span><br><div class="content">'+msg+'</div></div></div>');
+          window.scrollTo(0, document.body.scrollHeight);
+        });
+      });
+    </script>
+  </body>
+</html>
